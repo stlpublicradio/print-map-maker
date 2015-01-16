@@ -40,6 +40,8 @@
 			font-weight:bold; 
 			font-family:Arial; 
 			font-size:12px;}
+			
+		}
 
 		</style>
 	</head>
@@ -83,19 +85,22 @@
 			<p class="header">
 				In-story map <input type="button" name="map_1col" value="Save PNG" onclick="gatherinfo(map_1col)">
 			</p>
+			<div id="overlay1"><ul></ul></div>
 			<div id="map_1col"></div>
 		</div>
 		<div id="col2">
 			<p class="header">
 				Full-width map <input type="button" name="map_2col" value="Save PNG" onclick="gatherinfo(map_2col)">
 			</p>
+			<div id="overlay2"><ul></ul></div>
 			<div id="map_2col"></div>
 		</div>
 		<div id="col3">
 			<p class="header">
 				Big map <input type="button" name="map_3col" value="Save PNG" onclick="gatherinfo(map_3col)">
 			</p>
-			<div id="map_3col"></div>
+		<div id="overlay3"><ul></ul></div>
+		<div id="map_3col"></div>
 		</div>
 		
 		<div id="images"></div>
@@ -134,7 +139,7 @@
 			L.mapbox.tileLayer(value).addTo(map_3col);
 		}
 
-		changeTiles('stlpr.321f9782');
+		changeTiles('examples.map-zr0njcqy');
 
 		// add miles scale to map
 		L.control.scale().addTo(map_1col);
@@ -156,7 +161,8 @@
 			map_2col.setView([getLat, getLon], 10);
 			map_3col.setView([getLat, getLon], 10);
 		}
-
+		
+		
 		function showMap(err, data) {
 		// Fit the map bounds to an area or zooming to a point.
 		if (data.lbounds) {
@@ -259,7 +265,103 @@
 		txt.addEventListener("keypress", function() {
 			if (event.keyCode == 13) go.click();
 		});
+		
+		// add marker by click
+		
+		simpleIcon = L.icon({
+			iconUrl: './img/icon.png',
+			iconSize: [20, 20],
+			iconAnchor: [10, 10]
+		});
+		
+		map_1col.on('click', fire(onMapClick1));
+		map_2col.on('click', onMapClick2);
+		map_3col.on('click', onMapClick3);
 
+		var markers1 = new Array();
+		var markers2 = new Array();
+		var markers3 = new Array();
+
+
+		function onMapClick1(e) {
+        
+		        var marker = new L.Marker(e.latlng, {
+					clickable: true,
+					draggable: true,
+					icon: simpleIcon
+				});
+
+		        map_1col.addLayer(marker);
+				
+		        markers1[marker._leaflet_id] = marker;
+		        $('#overlay1 > ul').append('<li>Marker '+ marker._leaflet_id + ' - <a href="#" class="remove" id="' + marker._leaflet_id + '">remove</a></li>');
+    
+		    // Remove a marker
+		    $('.remove').on("click", function() {
+		        // Remove the marker
+		        map_1col.removeLayer(markers1[$(this).attr('id')]);
+		        // Remove the link
+		        $(this).parent('li').remove();
+        
+		        // Remove the marker from the array
+		        delete markers1[$(this).attr('id')]; 
+        
+		    });
+    
+		};
+		function onMapClick2(e) {
+        
+		        var marker = new L.Marker(e.latlng, {
+					clickable: true,
+					draggable: true,
+					icon: simpleIcon
+				});
+
+		        map_2col.addLayer(marker);
+				
+		        markers2[marker._leaflet_id] = marker;
+		        $('#overlay2 > ul').append('<li>Marker '+ marker._leaflet_id + ' - <a href="#" class="remove" id="' + marker._leaflet_id + '">remove</a></li>');
+    
+		    // Remove a marker
+		    $('.remove').on("click", function() {
+		        // Remove the marker
+		        map_2col.removeLayer(markers2[$(this).attr('id')]);
+		        // Remove the link
+		        $(this).parent('li').remove();
+        
+		        // Remove the marker from the array
+		        delete markers2[$(this).attr('id')]; 
+        
+		    });
+    
+		};
+		function onMapClick3(e) {
+
+console.log(markers3)        
+		        var marker = new L.Marker(e.latlng, {
+					clickable: true,
+					draggable: true,
+					icon: simpleIcon
+				}).bindPopup("" + markers3.length);
+
+		        map_3col.addLayer(marker);
+				
+		        markers3[marker._leaflet_id] = marker;
+		        $('#overlay3 > ul').append('<li>Marker '+ markers3.length + ' - <a href="#" class="remove" id="' + marker._leaflet_id + '">remove</a></li>');
+    
+		    // Remove a marker
+		    $('.remove').on("click", function() {
+		        // Remove the marker
+		        map_3col.removeLayer(markers3[$(this).attr('id')]);
+		        // Remove the link
+		        $(this).parent('li').remove();
+        
+		        // Remove the marker from the array
+		        delete markers3[$(this).attr('id')]; 
+        
+		    });
+    
+		};		
 		</script>
 	</body>
 </html>
