@@ -21,11 +21,9 @@
 		
 		<style type="text/css" media="screen">
 
-		#map_1col{width:330px; height:700px;}
-		#map_2col{width:699px; height:1200px;}
-		#map_3col{width:1065px; height:1200px;}
-		#map_4col{width:1434px; height:1200px;}
-		#map_web{width:1300px; height:731px;}
+		#map_1col{width:317px; height:317px;}
+		#map_2col{width:663px; height:497px;}
+		#map_3col{width:1326px; height:995px;}
 
 		input.geocodify {
 			width:275px;
@@ -53,12 +51,8 @@
 			<label for="mapPicker">1. Choose a base map</label> 
 			<select id="mapPicker">
 				
-				<!-- Place you map styles here. You can have as many or as few as you can afford. -->
-				<option value="latimesmapping.f3da9821">
+				<option value="stlpr.321f9782">
 					Flat World
-				</option>
-				<option value="latimesmapping.e12be540">
-					Relief World
 				</option>
 			</select> 
 			<br>
@@ -87,33 +81,21 @@
 		</form>
 		<div id="col1">
 			<p class="header">
-				1 col map <input type="button" name="map_1col" value="Save PNG" onclick="gatherinfo(map_1col)">
+				In-story map <input type="button" name="map_1col" value="Save PNG" onclick="gatherinfo(map_1col)">
 			</p>
 			<div id="map_1col"></div>
 		</div>
 		<div id="col2">
 			<p class="header">
-				2 col map <input type="button" name="map_2col" value="Save PNG" onclick="gatherinfo(map_2col)">
+				Full-width map <input type="button" name="map_2col" value="Save PNG" onclick="gatherinfo(map_2col)">
 			</p>
 			<div id="map_2col"></div>
 		</div>
 		<div id="col3">
 			<p class="header">
-				3 col map <input type="button" name="map_3col" value="Save PNG" onclick="gatherinfo(map_3col)">
+				Big map <input type="button" name="map_3col" value="Save PNG" onclick="gatherinfo(map_3col)">
 			</p>
 			<div id="map_3col"></div>
-		</div>
-		<div id="col4">
-			<p class="header">
-				4 col map <input type="button" name="map_4col" value="Save PNG" onclick="gatherinfo(map_4col)">
-			</p>
-			<div id="map_4col"></div>
-		</div>
-		<div id="web">
-			<p class="header">
-				large web map <input type="button" name="map_web" value="Save PNG" onclick="gatherinfo(map_web)">
-			</p>
-			<div id="map_web"></div>
 		</div>
 		
 		<div id="images"></div>
@@ -126,28 +108,23 @@
 
 		// Provide access token
 		// Requires an API key that you generate from your Mapbox account. Find yours here https://www.mapbox.com/account/apps/
-		L.mapbox.accessToken = 'YOUR API KEY';
+		L.mapbox.accessToken = '';
 
 		// Create maps in the divs
 		var map_1col = L.mapbox.map('map_1col');
 		var map_2col = L.mapbox.map('map_2col');
-		var map_3col = L.mapbox.map('map_3col');
-		var map_4col = L.mapbox.map('map_4col');
-		var map_web = L.mapbox.map('map_web');
-		
+		var map_3col = L.mapbox.map('map_3col');		
 		
 		map_1col.scrollWheelZoom.disable();
 		map_2col.scrollWheelZoom.disable();
 		map_3col.scrollWheelZoom.disable();
-		map_4col.scrollWheelZoom.disable();
-		map_web.scrollWheelZoom.disable();
 		
 		
         var lineStyle = {'color':'#cd7139','weight': 4.5,'opacity': 1, 'lineJoin':'round'};
         var polyStyle = {'color': '#000','weight': 3,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
         var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
 			
-		var instructText='<label ><strong>1. Right-click the image below to save/download.<\/strong><\/label><br/><br/><label >2. Change the resolution to 216 dpi without resampling and save as a TIFF.<\/label><br/><br/><label >3. Embed in your Adobe Illustrator document.<\/label><br/><br/><label >4. Add "Mapbox, OpenStreetMap" to your source.<\/label><br/><br/>'
+		var instructText='<label ><strong>1. Right-click the image below to save/download.<\/strong><\/label><br/><br/><label >2. Upload to Core Publisher.<\/label><br/><br/><label >3. Add "Mapbox, OpenStreetMap" to your source.<\/label><br/><br/>'
 
 		var geocoder = L.mapbox.geocoder('mapbox.places-v1');
 
@@ -155,20 +132,16 @@
 			L.mapbox.tileLayer(value).addTo(map_1col);
 			L.mapbox.tileLayer(value).addTo(map_2col);
 			L.mapbox.tileLayer(value).addTo(map_3col);
-			L.mapbox.tileLayer(value).addTo(map_4col);
-			L.mapbox.tileLayer(value).addTo(map_web);
 		}
 
-		changeTiles('latimesmapping.62bfb037');
+		changeTiles('stlpr.321f9782');
 
 		// add miles scale to map
 		L.control.scale().addTo(map_1col);
 		L.control.scale().addTo(map_2col);
 		L.control.scale().addTo(map_3col);
-		L.control.scale().addTo(map_4col);
-		L.control.scale().addTo(map_web);
 
-		geocoder.query('los angeles, CA', showMap);
+		geocoder.query('st. louis, MO', showMap);
 
 		function findAddress(){
 			var getInput = document.getElementById('address').value;
@@ -182,8 +155,6 @@
 			map_1col.setView([getLat, getLon], 10);
 			map_2col.setView([getLat, getLon], 10);
 			map_3col.setView([getLat, getLon], 10);
-			map_4col.setView([getLat, getLon], 10);
-			map_web.setView([getLat, getLon], 10);
 		}
 
 		function showMap(err, data) {
@@ -192,20 +163,15 @@
 			map_1col.fitBounds(data.lbounds);
 			map_2col.fitBounds(data.lbounds);
 			map_3col.fitBounds(data.lbounds);
-			map_4col.fitBounds(data.lbounds);
-			map_web.fitBounds(data.lbounds);
 		} else if (data.latlng) {
 			map_1col.setView([data.latlng[0], data.latlng[1]], 13);
 			map_2col.setView([data.latlng[0], data.latlng[1]], 13);
 			map_3col.setView([data.latlng[0], data.latlng[1]], 13);
-			map_4col.setView([data.latlng[0], data.latlng[1]], 13);
-			map_web.setView([data.latlng[0], data.latlng[1]], 13);
-		}
+		};
 		}   
 
 		$("#address").geocodify({
 			onSelect: function (result) {
-				console.log(result);
 			}
 		});
 
@@ -235,21 +201,7 @@
 					return L.circleMarker(latlng, pointStyle);
 					}
 			}).addTo(map_3col);
-			
-			var jsonLayer4 = new L.geoJson(jsonData,{
-				style: function(feature) {return addStyle(feature);},
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, pointStyle);
-					}
-			}).addTo(map_4col);
-			
-			var jsonLayerW = new L.geoJson(jsonData,{
-				style: function(feature) {return addStyle(feature);},
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, pointStyle);
-					}
-			}).addTo(map_web);
-			
+						
 			
 			function addStyle(feature){
 	        switch (feature.geometry.type) {
